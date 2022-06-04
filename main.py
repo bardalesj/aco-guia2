@@ -4,6 +4,19 @@ alfabeto = "abcdefghijklmnopqrstuvwxyz"
 alfabetoMayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 longitudAlfabeto = len(alfabeto)
 
+#funcion para convertir texto a ascii
+def textoAscii(texto):
+    return ' '.join(list(map(str,map(ord, texto))))
+
+#funcion para convertir texto a binario
+def textoBinario(texto):
+    return ' '.join(format(ord(c), 'b') for c in texto)
+
+#funcion para convertir texto a hexadecimal   
+def textoHexadecimal(texto):
+    texto = texto.encode('utf-8')
+    return texto.hex()
+
 #funcion para encriptar
 def encriptar(mensaje, llave):
     print(mensaje)
@@ -20,6 +33,10 @@ def encriptar(mensaje, llave):
             alfabetoAUsar = alfabetoMayusculas
         posicion = (valorLetra - limite + llave) % longitudAlfabeto
         textoEncriptado += alfabetoAUsar[posicion]
+    print(textoEncriptado)
+    print(textoAscii(textoEncriptado))
+    print(textoBinario(textoEncriptado))
+    print(textoHexadecimal(textoEncriptado))
     return textoEncriptado
 
 #funcion para crear ventana de encriptar/desencriptar
