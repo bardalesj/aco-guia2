@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 
+#Variables que contienen el diccionario de encriptación
 alfabeto = "abcdefghijklmnopqrstuvwxyz"
 alfabetoMayusculas = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 longitudAlfabeto = len(alfabeto)
@@ -18,35 +19,30 @@ def textoHexadecimal(texto):
     texto = texto.encode('utf-8')
     return texto.hex()
 
-#funcion para encriptar
-def desencriptar(mensaje, llave, resultado):
-    print(mensaje)
+#funcion para encriptar en método Cesar
+def desencriptar(mensaje, llave):
     textoDesencriptado = ""
     for letra in mensaje:
         if not letra.isalpha() or letra.lower() == 'ñ':
             textoDesencriptado += letra
             continue
         valor_letra = ord(letra)
-        # Suponemos que es minúscula, así que esto comienza en 97(a) y se usará el alfabeto en minúsculas
         alfabeto_a_usar = alfabeto
-        limite = 97  # Pero si es mayúscula, comienza en 65(A) y se usa en mayúsculas
+        limite = 97
         if letra.isupper():
             limite = 65
             alfabeto_a_usar = alfabetoMayusculas
-
-        # Rotamos la letra, ahora hacia la izquierda
         posicion = (valor_letra - limite - llave) % longitudAlfabeto
-
-        # Convertimos el entero resultante a letra y lo concatenamos
         textoDesencriptado += alfabeto_a_usar[posicion]
+
+    #Se asignan los resultados
     resultadoASCII.set(textoAscii(textoDesencriptado))
     resultadoBinario.set(textoBinario(textoDesencriptado))
     resultadoHexa.set(textoHexadecimal(textoDesencriptado))
     resultadoChar.set(textoDesencriptado)
 
-#funcion para encriptar
-def encriptar(mensaje, llave, ventana):
-    print(mensaje)
+#funcion para encriptar en método Cesar
+def encriptar(mensaje, llave):
     textoEncriptado = ""
     for letra in mensaje:
         if not letra.isalpha() or letra.lower() == 'ñ':
@@ -65,16 +61,16 @@ def encriptar(mensaje, llave, ventana):
     resultadoHexa.set(textoHexadecimal(textoEncriptado))
     resultadoChar.set(textoEncriptado)
 
-#Función de asignación de opción
-def ejecutarOpcion(opcion, mensaje, llave, ventana):
+#Función de asignación de opción, llamada desde el botón "encriptar o desencriptar"
+def ejecutarOpcion(opcion, mensaje, llave):
     if opcion == "Encriptar":
-        encriptar(mensaje, llave, ventana)
+        encriptar(mensaje, llave)
     else:
-        desencriptar(mensaje, llave, ventana)
+        desencriptar(mensaje, llave)
 
 #funcion para crear ventana de encriptar/desencriptar
 def ventanaMensaje(opcion):
-    #Ventana
+    #Se crea la ventana de ingreso de información
     ventanaMensaje = Toplevel(ventana)
     ventanaMensaje.title(f"Guia 2 - {opcion}")
     ventanaMensaje.geometry("500x450")
@@ -82,27 +78,27 @@ def ventanaMensaje(opcion):
     ventanaMensaje.protocol("WM_DELETE_WINDOW", disable_event)
     ventanaMensaje.focus_set()
 
-    #Ingreso de datos
+    #Cajas de texto para ingreso de datos
     Label(ventanaMensaje, text="Ingresa el mensaje:").place(x=50, y=50)
     Label(ventanaMensaje, text="Ingresa la llave:").place(x=50, y=100)
     mensaje = Entry(ventanaMensaje)
     mensaje.place(x=175, y=50)
     llave = Entry(ventanaMensaje, validate="key", validatecommand=(validation, "%S"))
     llave.place(x=175, y=100)
-    Button(ventanaMensaje, text = opcion, command= lambda: ejecutarOpcion(opcion, mensaje.get(), int(llave.get()), ventana)).place(x=50, y=150)
+    Button(ventanaMensaje, text = opcion, command= lambda: ejecutarOpcion(opcion, mensaje.get(), int(llave.get()))).place(x=50, y=150)
 
-    #Resultados
-    Label(ventanaMensaje, text="Resultado ASCII:").place(x=50, y=200)
-    txtASCII = Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoASCII).place(x=175, y=200)
+    #Cajas de texto de Resultados
+    Label(ventanaMensaje, text="ASCII:").place(x=50, y=200)
+    Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoASCII).place(x=175, y=200)
 
-    Label(ventanaMensaje, text="Resultado Binario:").place(x=50, y=250)
-    txtBinario = Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoBinario).place(x=175, y=250)    
+    Label(ventanaMensaje, text="Binario:").place(x=50, y=250)
+    Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoBinario).place(x=175, y=250)    
 
-    Label(ventanaMensaje, text="Resultado Hexadecimal:").place(x=50, y=300)
-    txtHexa = Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoHexa).place(x=175, y=300)
+    Label(ventanaMensaje, text="Hexadecimal:").place(x=50, y=300)
+    Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoHexa).place(x=175, y=300)
 
-    Label(ventanaMensaje, text="Resultado char:").place(x=50, y=350)
-    txtChar = Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoChar).place(x=175, y=350)
+    Label(ventanaMensaje, text="Char:").place(x=50, y=350)
+    Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoChar).place(x=175, y=350)
     
     #Botón Salir
     Button(ventanaMensaje, text = "Salir", command= lambda: salir(ventanaMensaje)).place(x=400, y=400)
@@ -117,9 +113,12 @@ def salir(vModal):
     vModal.withdraw()
     ventana.deiconify()
 
+#Método para evitar que cierren la ventana
+#por otra forma que no sea el botón
 def disable_event():
     pass
 
+#Método que valida que no permita letras
 def only_numbers(char):
     return char.isdigit()
 
@@ -130,8 +129,10 @@ ventana.geometry("350x100")
 ventana.resizable(0,0)
 cabecera = Label(ventana, text = "Método César").pack()
 
+#Se registra la instancia de llamado de método de validación de solo números
 validation = ventana.register(only_numbers)
 
+#variables que contienen los resultados en cada calculo.
 resultadoASCII = tk.StringVar()
 resultadoBinario = tk.StringVar()
 resultadoHexa = tk.StringVar()
