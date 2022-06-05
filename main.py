@@ -81,11 +81,11 @@ def ventanaMensaje(opcion):
     #Cajas de texto para ingreso de datos
     Label(ventanaMensaje, text="Ingresa el mensaje:").place(x=50, y=50)
     Label(ventanaMensaje, text="Ingresa la llave:").place(x=50, y=100)
-    mensaje = Entry(ventanaMensaje)
+    mensaje = Entry(ventanaMensaje, width = 50)
     mensaje.place(x=175, y=50)
-    llave = Entry(ventanaMensaje, validate="key", validatecommand=(validation, "%S"))
+    llave = Entry(ventanaMensaje, width = 50, validate="key", validatecommand=(validation, "%S"))
     llave.place(x=175, y=100)
-    Button(ventanaMensaje, text = opcion, command= lambda: ejecutarOpcion(opcion, mensaje.get(), int(llave.get()))).place(x=50, y=150)
+    Button(ventanaMensaje, text = opcion, width = 10, command= lambda: ejecutarOpcion(opcion, mensaje.get(), int(llave.get()))).place(x=400, y=150)
 
     #Cajas de texto de Resultados
     Label(ventanaMensaje, text="ASCII:").place(x=50, y=200)
@@ -101,7 +101,7 @@ def ventanaMensaje(opcion):
     Entry(ventanaMensaje, width = 50, state="readonly", textvariable=resultadoChar).place(x=175, y=350)
     
     #Botón Salir
-    Button(ventanaMensaje, text = "Salir", command= lambda: salir(ventanaMensaje)).place(x=400, y=400)
+    Button(ventanaMensaje, text = "Salir", width = 10, command= lambda: salir(ventanaMensaje)).place(x=400, y=400)
     ventana.withdraw()
 
 #Método para cerrar las ventanas
